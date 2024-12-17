@@ -22,7 +22,9 @@ jobs:
       # Set up Azure CLI to help store new GMaps API key in Key Vault.
       - name: Set up Azure CLI 
         uses: azure/cli@v2
-
+        with:
+          azcliversion: 2.67.0
+          
       # Set up the Google Cloud SDK to help rotate the GMaps API key.
       - name: Set up Google Cloud SDK 
         uses: google-github-actions/setup-gcloud@v2
