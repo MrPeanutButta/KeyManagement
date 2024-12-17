@@ -51,13 +51,11 @@ jobs:
         run: |
           echo "Creating a new GMaps API Key"
 
-          echo "KEY=$(gcloud alpha services api-keys create \
+          echo "NEWKEY=$(gcloud alpha services api-keys create \
           --project ${{ secrets.GCP_PROJECT_ID }} \
           --display-name "GMaps API Key" \
-          --format="json" | jq -r '.keyString')" >> $GITHUB_ENV
+          --format="json" | jq -r '.keyString')" >> $GITHUB_OUTPUT
           
-          echo "::set-output name=gmapsApiKey::$KEY"
-
       # Use Azure CLI to help store new GMaps API key in Key Vault.
       - name: Store new GMaps API Key in Azure Key Vault
         uses: azure/cli@v2
@@ -69,6 +67,6 @@ jobs:
             az keyvault secret set \
             --vault-name ${{ secrets.KEYVAULT_NAME }} \
             --name ${{ secrets.GMAPS_API_SECRET_NAME }} \
-            --value ${{ steps.newGmapsApiKeyAction.outputs.gmapsApiKey }}
+            --value $NEWKEY
 
 
