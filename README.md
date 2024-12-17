@@ -1,25 +1,38 @@
-# KeyManagement
+# Rotate Google Maps API Key GitHub Action
+
+This GitHub Action automates the process of rotating the Google Maps API key. It performs the following steps:
+
+1. Checks out the repository.
+2. Authenticates to Google Cloud.
+3. Sets up the Google Cloud SDK.
+4. Logs into Azure using service principal credentials.
+5. Retrieves the current Google Maps API key from Azure Key Vault.
+6. Creates a new Google Maps API key using the Google Cloud SDK.
+7. Stores the new Google Maps API key in Azure Key Vault.
+
+## Prerequisites
+
+Before using this action, ensure you have the following:
+
+- A Google Cloud project with the necessary permissions to create API keys.
+- An Azure Key Vault to store the API keys.
+- GitHub secrets configured with the following keys:
+  - `GCP_SA_KEY`: Google Cloud service account key in JSON format.
+  - `GCP_PROJECT_ID`: Google Cloud project ID.
+  - `AZURE_CREDENTIALS`: Azure service principal credentials in JSON format.
+  - `KEYVAULT_NAME`: Name of the Azure Key Vault.
+  - `GMAPS_API_SECRET_NAME`: Name of the secret in Azure Key Vault where the Google Maps API key is stored.
+
+## Running the Action Manually
+
+To run the action manually, navigate to the "Actions" tab in your GitHub repository, select the workflow, and click "Run workflow".
+
+## Conclusion
+
+This GitHub Action provides an automated way to rotate your Google Maps API key and store the new key securely in Azure Key Vault. Ensure your GitHub secrets are correctly configured before running the action.
 
 ## Documentation
-[Google Maps Platform Documentation](https://developers.google.com/maps/apis-by-platform)
 
-[GitHub Actions Documentation](https://docs.github.com/en/actions)
-
-[Azure Key Vault Documentation](https://learn.microsoft.com/en-us/azure/key-vault/)
-
-
-AIzaSyCeUQIWOk00luPyp-h0nQeRczbureYZ-xM
-
-
-which github actions help rotate google maps api key?
-There are a few GitHub Actions available that can help you rotate Google Maps API keys. Here are some notable ones:
-
-streof/rotate-maps-api-key-workflow: This workflow automates the process of rotating Google Maps API keys without disrupting services that rely on them. It includes steps to authenticate with Google Cloud, create a new API key, authenticate with Azure, store the new API key in Azure Key Vault, and delete old API keys.
-
-bociankruk/gmaps-api-key-rotation: This action automates the rotation of Google Maps API keys. It authenticates to Google Cloud, generates a new API key, stores it securely in Azure Key Vault, and deletes the old API key from Google Cloud.
-
-ArmaKeoN/GMapsAzureIntegration: This repository hosts a GitHub Actions workflow for automatically rotating Google Maps API keys and securely storing them in Azure Key Vault. It ensures up-to-date key management and enhances security.
-
-These actions can help you manage and rotate your Google Maps API keys efficiently. If you need more specific examples or details, feel free to ask!
-
--------------
+- [Google Maps Platform Documentation](https://developers.google.com/maps/apis-by-platform)
+- [GitHub Actions Documentation](https://docs.github.com/en/actions)
+- [Azure Key Vault Documentation](https://learn.microsoft.com/en-us/azure/key-vault/)
