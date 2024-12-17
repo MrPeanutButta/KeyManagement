@@ -16,6 +16,7 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
+
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v4
 
@@ -46,6 +47,8 @@ jobs:
           secrets: ${{ secrets.GMAPS_API_SECRET_NAME }}
 
       # Use gcloud SDK to create a new API key
+      # Redirect output to /dev/null because the 
+      # result contains sensitive information.
       - name: Create a new GMaps API Key
         id: newGmapsApiKeyAction
         run: |
@@ -54,8 +57,9 @@ jobs:
           echo "NEWKEY=$(gcloud alpha services api-keys create \
           --project ${{ secrets.GCP_PROJECT_ID }} \
           --display-name "GMaps API Key" \
-          --format="json" | jq -r '.keyString')" >> $GITHUB_OUTPUT
-          
+          --format="json" 2> /dev/null | jq -r '.response.keyString') \
+          >> $GITHUB_OUTPUT
+                   
       # Use Azure CLI to help store new GMaps API key in Key Vault.
       - name: Store new GMaps API Key in Azure Key Vault
         uses: azure/cli@v2
