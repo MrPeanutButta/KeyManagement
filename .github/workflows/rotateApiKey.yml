@@ -46,6 +46,7 @@ jobs:
           secrets: ${{ secrets.GMAPS_API_SECRET_NAME }}
 
       # Use gcloud SDK to create a new API key
+      # setoutput deprecation: https://github.blog/changelog/2022-10-11-github-actions-deprecating-save-state-and-set-output-commands/
       - name: Create a new GMaps API Key
         id: newGmapsApiKeyAction
         run: |
