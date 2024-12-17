@@ -46,18 +46,17 @@ jobs:
           secrets: ${{ secrets.GMAPS_API_SECRET_NAME }}
 
       # Use gcloud SDK to create a new API key
-      # setoutput deprecation: https://github.blog/changelog/2022-10-11-github-actions-deprecating-save-state-and-set-output-commands/
       - name: Create a new GMaps API Key
         id: newGmapsApiKeyAction
         run: |
           echo "Creating a new GMaps API Key"
 
-          echo "::setoutput name=gmapsApiKey:: \
-          $(gcloud alpha services api-keys create \
+          KEY=$(gcloud alpha services api-keys create \
           --project ${{ secrets.GCP_PROJECT_ID }} \
-          --display-name "GMaps API Key")"
-
-          echo "New GMaps API Key: $KEY"
+          --display-name "GMaps API Key" \
+          --format="json" | jq -r '.keyString')
+          
+          echo "::set-output name=gmapsApiKey::$KEY"
 
       # Set up Azure CLI to help store new GMaps API key in Key Vault.
       - name: Store new GMaps API Key in Azure Key Vault
