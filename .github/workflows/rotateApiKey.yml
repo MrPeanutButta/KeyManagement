@@ -1,6 +1,6 @@
 # This is a basic workflow to help you get started with Actions
 
-name: RotateApiKey
+name: RotateGMapsApiKey
 
 # Controls when the workflow will run
 on:
@@ -19,12 +19,53 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v4
 
-      # Runs a single command using the runners shell
-      - name: Run a one-line script
-        run: echo Hello, world!
+      # Set up Azure CLI to help store new GMaps API key in Key Vault.
+      - name: Set up Azure CLI 
+        uses: azure/cli@v2
 
-      # Runs a set of commands using the runners shell
-      - name: Run a multi-line script
+      # Set up the Google Cloud SDK to help rotate the GMaps API key.
+      - name: Set up Google Cloud SDK 
+        uses: google-github-actions/setup-gcloud@v2
+        with: 
+          project_id: ${{ secrets.GCP_PROJECT_ID }} 
+          service_account_key: ${{ secrets.GCP_SA_KEY }} 
+          export_default_credentials: true
+
+      # Logs into Entra ID teanant using service pricipal credentials.
+      # This allows us to access the Azure Key Vault.
+      # The service principal credentials are stored in GitHub secrets.
+      - uses: Azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      # Get API secret from Azure Key Vault
+      - uses: Azure/get-keyvault-secrets@v1
+        with:
+          vault-name: ${{ secrets.KEYVAULT_NAME }}
+          secrets: ${{ secrets.GMAPS_API_SECRET_NAME }}
+          id: gmapsApiKey
+
+      # Use gcloud SDK to create a new API key
+      - name: Create a new GMaps API Key
+        id: newGmapsApiKeyAction
         run: |
-          echo Add other actions to build,
-          echo test, and deploy your project.
+          echo "Creating a new GMaps API Key"
+
+          echo "::setoutput name=gmapsApiKey:: \
+          $(gcloud alpha services api-keys create \
+          --project ${{ secrets.GCP_PROJECT_ID }} \
+          --display-name "GMaps API Key")"
+
+          echo "New GMaps API Key: $KEY"
+
+      # Store the new API key in Azure Key Vault
+      - name: Store new GMaps API Key in Azure Key Vault
+        run: |
+          echo "Storing new GMaps API Key in Azure Key Vault"
+
+          az keyvault secret set \
+          --vault-name ${{ secrets.KEYVAULT_NAME }} \
+          --name ${{ secrets.GMAPS_API_SECRET_NAME }} \
+          --value ${{ steps.newGmapsApiKeyAction.outputs.gmapsApiKey }}
+
+
