@@ -41,7 +41,7 @@ jobs:
       # Get API secret from Azure Key Vault
       - uses: Azure/get-keyvault-secrets@v1
         with:
-          vault-name: ${{ secrets.KEYVAULT_NAME }}
+          keyvault: ${{ secrets.KEYVAULT_NAME }}
           secrets: ${{ secrets.GMAPS_API_SECRET_NAME }}
           id: gmapsApiKey
 
