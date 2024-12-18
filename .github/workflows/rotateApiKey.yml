@@ -61,9 +61,10 @@ jobs:
 
           # Export the new key as an environment variable.
           # Bash does not nativly support secure strings.
-          echo "NEW_GMAPS_KEY=$NEWKEY" >> $GITHUB_OUTPUT
+          echo "NEW_GMAPS_KEY=$NEWKEY" >> "$GITHUB_OUTPUT"
                    
       # Use Azure CLI to help store new GMaps API key in Key Vault.
+      # NEW_GMAPS_KEY is wrapped in quotes to handle special characters.
       - name: Store new GMaps API Key in Azure Key Vault
         uses: azure/cli@v2
         with:
@@ -74,6 +75,6 @@ jobs:
             az keyvault secret set \
             --vault-name ${{ secrets.KEYVAULT_NAME }} \
             --name ${{ secrets.GMAPS_API_SECRET_NAME }} \
-            --value $NEW_GMAPS_KEY
+            --value "$NEW_GMAPS_KEY"
 
 
