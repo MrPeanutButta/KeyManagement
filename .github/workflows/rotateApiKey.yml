@@ -75,6 +75,6 @@ jobs:
             az keyvault secret set \
             --vault-name ${{ secrets.KEYVAULT_NAME }} \
             --name ${{ secrets.GMAPS_API_SECRET_NAME }} \
-            --value "$NEW_GMAPS_KEY" 2> /dev/null
+            --value "$NEW_GMAPS_KEY" >> /dev/null
 
 
