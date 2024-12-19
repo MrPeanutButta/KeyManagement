@@ -7,17 +7,20 @@ on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+# A workflow run is made up of one or more jobs that can run sequentially or 
+# in parallel
 jobs:
   # This workflow contains a single job called "build"
   build:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
+    # Steps represent a sequence of tasks that will be executed as part of 
+    # the job
     steps:
 
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can 
+      # access it
       - uses: actions/checkout@v4
 
       # Set up the Google Cloud auth & SDK to help rotate the GMaps API key.
@@ -40,6 +43,10 @@ jobs:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
       # Get API secret from Azure Key Vault
+      
+      # Azure/get-keyvault-secrets@v1 Action is deprecated. 
+      # Instead, one can use azure/cli@v2 action and pass a custom 
+      # script to it to access azure key vault.
       - uses: Azure/get-keyvault-secrets@v1
         id: gmapsApiKey
         with:
@@ -61,10 +68,14 @@ jobs:
 
           # Export the new key as an environment variable.
           # Bash does not nativly support secure strings.
+          # In PS, one can use ConvertTo-SecureString to encrypt the key
+          # then set that secured key as an environment variable.
           echo "NEW_GMAPS_KEY=$NEWKEY" >> $GITHUB_ENV
                    
       # Use Azure CLI to help store new GMaps API key in Key Vault.
       # NEW_GMAPS_KEY is wrapped in quotes to handle special characters.
+      # Redirect output to /dev/null because the result contains 
+      # sensitive information.
       - name: Store new GMaps API Key in Azure Key Vault
         uses: azure/cli@v2
         with:
