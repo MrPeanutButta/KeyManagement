@@ -29,10 +29,6 @@ Before using this action, ensure you have the following:
 
 To run the action manually, navigate to the "Actions" tab in your GitHub repository, select the workflow, and click "Run workflow".
 
-## Conclusion
-
-This GitHub Action provides an automated way to rotate your Google Maps API key and store the new key securely in Azure Key Vault. Ensure your GitHub secrets are correctly configured before running the action.
-
 ## Documentation
 
 - [Google Maps Platform Documentation](https://developers.google.com/maps/apis-by-platform)
@@ -76,3 +72,7 @@ This document provides instructions on how to operate, maintain, and enhance the
 
 ### Disclosure of AI Tools
 This documentation was generated with the assistance of GitHub Copilot, an AI tool. The benefits of using this tool include increased efficiency and the ability to quickly generate boilerplate code and documentation. However, drawbacks include the need for careful review to ensure accuracy and relevance to the specific use case.
+
+## Conclusion
+
+This GitHub Action provides an automated way to rotate your Google Maps API key and store the new key securely in Azure Key Vault. Ensure your GitHub secrets are correctly configured before running the action.
