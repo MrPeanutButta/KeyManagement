@@ -1,6 +1,6 @@
 # Rotate Google Maps API Key GitHub Action
 
-> This documentation was genearate using Github Copilot.
+> This documentation was genearated using Github Copilot.
 
 This GitHub Action automates the process of rotating the Google Maps API key. It performs the following steps:
 
